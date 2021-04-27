@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Color Extract</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
+
+</head>
+<div class="container mt-3">
+<body>
+
+<h1>Select a image to upload</h1>
+<p>
+	{% with messages = get_flashed_messages() %}
+	  {% if messages %}
+		<ul>
+		{% for message in messages %}
+		  {{ message }}
+		{% endfor %}
+		</ul>
+	  {% endif %}
+	{% endwith %}
+</p>
+{% if filename %}
+	<div>
+		<img src="{{ url_for('display_image', filename=filename) }}" width="500" height="400">
+	</div>
+{% endif %}
+<form method="post" action="/" enctype="multipart/form-data">
+    <dl>
+		<p class='mt-3'>
+			<input type="file" name="file" autocomplete="off" required>
+		</p>
+    </dl>
+<div class="container mt-3 w-25 mb-3">
+    Number of colors:
+    <input class="form-control" type ="text" name="number_of_colors" placeholder="Number of Colors">
+</div>
+
+    <p>
+		<input type="submit" value="Submit">
+	</p>
+</form>
+{% if filename %}
+  <div class="row">
+    <div class="col-sm">
+        Color
+    </div>
+    <div class="col-sm">
+      Color Code
+    </div>
+    <div class="col-sm">
+      Percentage
+    </div>
+  </div>
+{% endif %}
+{% for color,percent in top_colors|zip(top_percents) %}
+  <div class="row border">
+    <div class="col-sm" style="background-color:{{color}}">
+    </div>
+    <div class="col-sm">
+      {{color}}
+    </div>
+    <div class="col-sm">
+        {{ "%.2f"|format(percent) }}%
+    </div>
+  </div>
+{%endfor%}
+
+
+</body>
+	</div>
+</html>
